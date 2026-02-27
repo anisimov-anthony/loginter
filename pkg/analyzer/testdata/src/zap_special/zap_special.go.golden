@@ -1,0 +1,73 @@
+package zap_special
+
+import "go.uber.org/zap"
+
+func examples() {
+	// Rule 3: log messages must not contain special characters or emoji
+
+	logger := zap.NewNop()
+	sugar := logger.Sugar()
+
+	// Exclamation marks
+	logger.Info("server started")        // want `log message must not contain special characters or emoji`
+	logger.Error("connection failed")  // want `log message must not contain special characters or emoji`
+
+	// At sign
+	logger.Warn("notify admin now") // want `log message must not contain special characters or emoji`
+
+	// Hash
+	logger.Info("issue 123 found") // want `log message must not contain special characters or emoji`
+
+	// Percent is allowed (used in format strings like %d, %v)
+	logger.Debug("100% done")
+
+	// Dollar sign
+	logger.Info("value 10") // want `log message must not contain special characters or emoji`
+
+	// Ampersand
+	logger.Info("client  server") // want `log message must not contain special characters or emoji`
+
+	// Asterisk
+	logger.Warn("important note") // want `log message must not contain special characters or emoji`
+
+	// Tilde
+	logger.Info("home directory") // want `log message must not contain special characters or emoji`
+
+	// Semicolon
+	logger.Debug("step 1 step 2") // want `log message must not contain special characters or emoji`
+
+	// Backtick
+	logger.Info("run command") // want `log message must not contain special characters or emoji`
+
+	// Emoji in logger methods
+	logger.Info("server started") // want `log message must not contain special characters or emoji`
+	logger.Error("failed")        // want `log message must not contain special characters or emoji`
+	logger.Warn("warning")        // want `log message must not contain special characters or emoji`
+
+	// SugaredLogger w-methods
+	sugar.Infow("started", "port", 8080)   // want `log message must not contain special characters or emoji`
+	sugar.Errorw("failed", "key", "val") // want `log message must not contain special characters or emoji`
+	sugar.Warnw("done user")              // want `log message must not contain special characters or emoji`
+
+	// SugaredLogger f-methods
+	sugar.Infof("started port %d", 8080) // want `log message must not contain special characters or emoji`
+	sugar.Errorf("failed err: %s", "") // want `log message must not contain special characters or emoji`
+
+	// Correct - no special chars
+	logger.Info("server started")
+	logger.Error("connection failed")
+	logger.Warn("something went wrong")
+	logger.Debug("debug info")
+	sugar.Infow("server started", "port", 8080)
+	sugar.Infof("started on port 8080")
+
+	// Allowed punctuation
+	logger.Info("hello, world")
+	logger.Info("done.")
+	logger.Info("well-known host")
+	logger.Info("value (default 42)")
+	logger.Info("host: localhost")
+	logger.Info("path/to/file")
+	logger.Info("key=value")
+	logger.Info("snake_case field")
+}

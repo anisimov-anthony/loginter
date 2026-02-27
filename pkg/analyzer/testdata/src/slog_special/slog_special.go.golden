@@ -1,0 +1,79 @@
+package slog_special
+
+import (
+	"context"
+	"log/slog"
+)
+
+func examples() {
+	// Rule 3: log messages must not contain special characters or emoji
+
+	// Exclamation marks
+	slog.Info("server started")       // want `log message must not contain special characters or emoji`
+	slog.Error("connection failed") // want `log message must not contain special characters or emoji`
+
+	// At sign
+	slog.Warn("notify admin now") // want `log message must not contain special characters or emoji`
+
+	// Hash
+	slog.Info("issue 123 found") // want `log message must not contain special characters or emoji`
+
+	// Percent is allowed (used in format strings like %d, %v)
+	slog.Debug("100% done")
+
+	// Dollar sign
+	slog.Info("value 10") // want `log message must not contain special characters or emoji`
+
+	// Ampersand
+	slog.Info("client  server") // want `log message must not contain special characters or emoji`
+
+	// Asterisk
+	slog.Warn("important note") // want `log message must not contain special characters or emoji`
+
+	// Tilde
+	slog.Info("home directory") // want `log message must not contain special characters or emoji`
+
+	// Semicolon
+	slog.Debug("step 1 step 2") // want `log message must not contain special characters or emoji`
+
+	// Backtick
+	slog.Info("run command") // want `log message must not contain special characters or emoji`
+
+	// Caret
+	slog.Warn("version 1.0.0") // want `log message must not contain special characters or emoji`
+
+	// Emoji
+	slog.Info("server started") // want `log message must not contain special characters or emoji`
+	slog.Error("failed")        // want `log message must not contain special characters or emoji`
+	slog.Warn("warning")        // want `log message must not contain special characters or emoji`
+
+	// Unicode ellipsis
+	slog.Info("loading")             // want `log message must not contain special characters or emoji`
+	slog.Info("connection failed") // want `log message must not contain special characters or emoji`
+
+	// Context variants
+	ctx := context.Background()
+	slog.InfoContext(ctx, "starting") // want `log message must not contain special characters or emoji`
+
+	// Logger instance
+	logger := slog.Default()
+	logger.Info("started") // want `log message must not contain special characters or emoji`
+
+	// Correct - no special chars
+	slog.Info("server started")
+	slog.Error("connection failed")
+	slog.Warn("something went wrong")
+	slog.Debug("debug info")
+
+	// Allowed punctuation
+	slog.Info("hello, world")
+	slog.Info("done.")
+	slog.Info("well-known host")
+	slog.Info("value (default 42)")
+	slog.Info("host: localhost")
+	slog.Info("path/to/file")
+	slog.Info("key=value")
+	slog.Info("a+b result")
+	slog.Info("snake_case field")
+	slog.Info("said 'hello'")
+}

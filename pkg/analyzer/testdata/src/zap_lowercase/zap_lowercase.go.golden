@@ -1,0 +1,48 @@
+package zap_lowercase
+
+import "go.uber.org/zap"
+
+func examples() {
+	// Rule 1: log messages must start with lowercase letter
+
+	logger := zap.NewNop()
+	sugar := logger.Sugar()
+
+	// Logger methods
+	logger.Info("starting server on port 8080")  // want `log message must start with a lowercase letter`
+	logger.Error("failed to connect to database") // want `log message must start with a lowercase letter`
+	logger.Warn("warning about something")        // want `log message must start with a lowercase letter`
+	logger.Debug("debug mode enabled")            // want `log message must start with a lowercase letter`
+	logger.Fatal("fatal system error")            // want `log message must start with a lowercase letter`
+	logger.Panic("panic occurred")                // want `log message must start with a lowercase letter`
+	logger.DPanic("dPanic in development")        // want `log message must start with a lowercase letter`
+
+	// SugaredLogger w-methods (structured)
+	sugar.Infow("starting server", "port", 8080)  // want `log message must start with a lowercase letter`
+	sugar.Errorw("failed to connect", "err", "x") // want `log message must start with a lowercase letter`
+	sugar.Warnw("warning here", "key", "val")     // want `log message must start with a lowercase letter`
+	sugar.Debugw("debug info", "key", "val")      // want `log message must start with a lowercase letter`
+	sugar.Fatalw("fatal error", "key", "val")     // want `log message must start with a lowercase letter`
+
+	// SugaredLogger f-methods (printf-style)
+	sugar.Infof("starting on port %d", 8080)  // want `log message must start with a lowercase letter`
+	sugar.Errorf("failed: %s", "err")         // want `log message must start with a lowercase letter`
+	sugar.Warnf("warning: %s", "msg")         // want `log message must start with a lowercase letter`
+	sugar.Debugf("debug: %v", "val")          // want `log message must start with a lowercase letter`
+
+	// All caps acronym
+	logger.Info("hTTP server started") // want `log message must start with a lowercase letter`
+
+	// Correct - starts with lowercase
+	logger.Info("starting server on port 8080")
+	logger.Error("failed to connect to database")
+	logger.Warn("something went wrong")
+	logger.Debug("debug mode enabled")
+	sugar.Infow("starting server", "port", 8080)
+	sugar.Infof("starting on port %d", 8080)
+
+	// Numbers and punctuation at start are ok
+	logger.Info("8080 is the port")
+	logger.Info("3 retries remaining")
+	logger.Info("")
+}

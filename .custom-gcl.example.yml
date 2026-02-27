@@ -1,0 +1,5 @@
+version: v2.2.0
+plugins:
+  - module: 'github.com/anisimov-anthony/loginter'
+    import: 'github.com/anisimov-anthony/loginter/plugin'
+    version: v1.0.0

@@ -1,0 +1,21 @@
+version: "2"
+linters:
+  default: none
+  enable:
+    - loginter
+  settings:
+    custom:
+      loginter:
+        type: "module"
+        description: "Checks log messages for common issues"
+        settings:
+          # Enable/disable individual checks (all enabled by default)
+          check_lowercase: true
+          check_english: true
+          check_special: true
+          check_sensitive: true
+          # Add custom sensitive data patterns (in addition to defaults)
+          sensitive_patterns:
+            - "ssn"
+            - "credit_card"
+            - "social_security"
